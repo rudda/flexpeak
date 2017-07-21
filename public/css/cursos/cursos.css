@@ -1,0 +1,13 @@
+.demo-layout-transparent {
+    /*background: url('../../src/img/bg1.jpg') center / cover;*/
+    background-color: #00acc1;
+}
+.demo-layout-transparent .mdl-layout__header,
+.demo-layout-transparent .mdl-layout__drawer-button {
+    /* This background is dark, so we set text to white. Use 87% black instead if
+       your background is light. */
+    color: white;
+}
+.demo-list-three {
+    width: 650px;
+}

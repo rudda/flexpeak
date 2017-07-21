@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="../css/cursos/cadastrar.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
+<!--charts-->
+
+
+
+    <!---->
+    <title>Cursos</title>
+</head>
+<body>
+<!-- Uses a transparent header that draws on top of the layout's background -->
+<style>
+    .demo-layout-transparent {
+        background: url('../src/img/bg1.jpg') center / cover;
+    }
+
+    .demo-layout-transparent .mdl-layout__header,
+    .demo-layout-transparent .mdl-layout__drawer-button {
+        /* This background is dark, so we set text to white. Use 87% black instead if
+           your background is light. */
+        color: white;
+    }
+</style>
+<!-- Simple header with fixed tabs. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
+            mdl-layout--fixed-tabs">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <span class="mdl-layout-title">Curso de Excel Basico</span>
+        </div>
+        <!-- Tabs -->
+        <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+            <a href="#fixed-tab-1" class="mdl-layout__tab is-active">Resumo</a>
+            <a href="#fixed-tab-2" class="mdl-layout__tab">Alunos</a>
+
+        </div>
+    </header>
+
+    <main class="mdl-layout__content">
+        <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
+
+            <div class="page-content" >
+
+                <!--grid-->
+
+                <div class="mdl-grid" style="margin-top: 10px">
+
+                    <div class="mdl-cell mdl-cell--4-col">
+                        <div style="padding-top: 20px">
+
+                            <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="width: 400px">
+                                <div class="mdl-card__title">
+                                    <h2 class="mdl-card__title-text" >Situação dos Alunos</h2>
+
+                                </div>
+
+                                <div  style="height: 400px; width: 400px" >
+
+                                    <canvas id="myChart" width="400" height="400"></canvas>
+
+                                </div>
+
+                            </div>
+
+
+                            <script>
+                                var data = {
+                                    datasets: [{
+                                        data: [10, 20],
+                                        backgroundColor: [
+                                            'rgba(75, 192, 192, 0.2)',
+                                            'rgba(255,99,132,1)'
+                                        ],
+                                        borderColor: [
+
+                                            'rgba(75, 192, 192, 0.2)',
+                                            'rgba(255,99,132,1)'
+                                        ],
+                                        borderWidth: 1
+                                    }],
+
+                                    // These labels appear in the legend and in the tooltips when hovering different arcs
+                                    labels: [
+                                        'Aprovados',
+                                        'Reprovados'
+                                    ]
+                                };
+                                var ctx = document.getElementById("myChart").getContext('2d');
+                                var myDoughnutChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: data,
+                                    options:{
+                                        layout: {
+                                            padding: {
+                                                left: 10,
+                                                right: 10,
+                                                top: 10,
+                                                bottom: 10
+                                            }
+                                        },
+                                        config:{
+
+
+                                        }
+                                    }
+
+                                });
+
+                            </script>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="mdl-cell mdl-cell--4-col">
+
+
+                        <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="width: 400px; margin-top: 20px">
+
+                            <div class="mdl-card__title">
+                                <h2 class="mdl-card__title-text" >Resumo</h2>
+
+                            </div>
+
+                            <div  style="height: auto; width: 400px" >
+
+                                <div style="margin-top: 10px; margin-bottom: 10px; padding: 4px"> Parte 01 – Básico
+                                    1. Conceitos básicos do Ms Excel – Nova Interface 1.1. Faixa de Opções (guias, seções), Barra de acesso rápido, Botão do office, Opções do Excel, Célula, Planilha, Pasta. 1.2. Seleção: células, faixas de células, linhas, colunas.planilhas 1.3. Inserir/Excluir – linhas, colunas. Ocultar linhas e colunas. 2. Formatação de células 2.1. Número, Fonte, Padrões, Bordas, alinhamento. 2.2. Auto-formatação. 3. Verificar ortografia e auto-correção. 4. Criando uma tabela no Excel 4.1. Entendendo valores numéricos e alfanuméricos. 5. Calculando através de operadores 5.1. Aritméticos e lógicos. 6. Calculando através de funções. 6.1. Básicas: Soma(), média(), mínimo(), Máximo(), hoje(), Agora(), Se() simples. 7. Cálculo percentual. 8. Referencia de células relativas e absolutas. 9. Outras Funções Importantes: Cont.valores(), Cont.num(), Contar.vazio(),Cont.se(), Somase(), Se() composta(E e OU), Arredondar.para.cima.(), arredondar.para.baixo().</div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="mdl-cell mdl-cell--4-col">
+
+
+
+
+                        <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="width: 400px; margin-top: 20px; margin-bottom: 30px">
+
+                            <div class="mdl-card__title">
+                                <h2 class="mdl-card__title-text" >Avaliação do Curso</h2>
+
+                            </div>
+
+                            <div  style="height: 400px; width: auto" >
+
+                                <canvas id="myBar-Chart" width="400" height="400"></canvas>
+
+                            </div>
+
+                            <script>
+                                var ctx = document.getElementById("myBar-Chart").getContext('2d');
+
+
+
+                                var myBarChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: ["Excelente", "Bom", "Regular", "Ruim", "Péssimo"],
+                                        datasets: [{
+                                            label:"# Avaliação dos alunos",
+
+                                            data: [12, 19, 3, 5, 10],
+                                            backgroundColor: [
+                                                'rgba(75, 192, 192, 0.2)',
+                                                'rgba(54, 162, 235, 0.2)',
+                                                'rgba(255, 206, 86, 0.2)',
+                                                'rgba(153, 102, 255, 0.2)',
+                                                'rgba(255,99,132,1)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(75, 192, 192, 0.2)',
+                                                'rgba(54, 162, 235, 0.2)',
+                                                'rgba(255, 206, 86, 0.2)',
+                                                'rgba(153, 102, 255, 0.2)',
+                                                'rgba(255,99,132,1)'
+
+
+                                            ],
+                                            borderWidth: 1
+                                        }]}
+
+                                });
+
+                            </script>
+
+                        </div>
+
+
+                    </div>
+
+
+                    </div>
+                </div>
+
+                <!--grid-->
+
+
+
+        </section>
+        <section class="mdl-layout__tab-panel" id="fixed-tab-2">
+            <div class="page-content">
+
+                <div class="mdl-grid" >
+
+                    <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet">
+
+
+                        <ul class="demo-list-three mdl-list">
+                            <li class="mdl-list__item mdl-list__item--three-line">
+    <span class="mdl-list__item-primary-content">
+      <i class="material-icons mdl-list__item-avatar">person</i>
+      <span>Bryan Cranston</span>
+      <span class="mdl-list__item-text-body">
+        Bryan Cranston played the role of Walter in Breaking Bad. He is also known
+        for playing Hal in Malcom in the Middle.
+      </span>
+    </span>
+    <span class="mdl-list__item-secondary-content">
+      <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+    </span>
+                            </li>
+                            <li class="mdl-list__item mdl-list__item--three-line">
+    <span class="mdl-list__item-primary-content">
+      <i class="material-icons  mdl-list__item-avatar">person</i>
+      <span>Aaron Paul</span>
+      <span class="mdl-list__item-text-body">
+        Aaron Paul played the role of Jesse in Breaking Bad. He also featured in
+        the "Need For Speed" Movie.
+      </span>
+    </span>
+    <span class="mdl-list__item-secondary-content">
+      <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+    </span>
+                            </li>
+                            <li class="mdl-list__item mdl-list__item--three-line">
+    <span class="mdl-list__item-primary-content">
+      <i class="material-icons  mdl-list__item-avatar">person</i>
+      <span>Bob Odenkirk</span>
+      <span class="mdl-list__item-text-body">
+        Bob Odinkrik played the role of Saul in Breaking Bad. Due to public fondness for the
+        character, Bob stars in his own show now, called "Better Call Saul".
+      </span>
+    </span>
+    <span class="mdl-list__item-secondary-content">
+      <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+    </span>
+                            </li>
+                        </ul>
+
+
+                    </div>
+
+
+
+                </div>
+
+                <div class="mdl-grid" style="margin-top: 250px">
+
+                    <!-- div em branco-->
+                    <div class="mdl-cell mdl-cell--11-col mdl-cell--11-col-tablet"></div>
+                    <div class="mdl-cell mdl-cell--1-col mdl-cell--1-col-tablet">
+
+                        <!-- Colored FAB button -->
+                        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+                            <i class="material-icons" >add</i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+        </section>
+        <footer class="mdl-mini-footer" style="margin-top: 400px">
+            <div class="mdl-mini-footer__left-section">
+                <div class="mdl-logo">Desafio FlexPeak</div>
+                <ul class="mdl-mini-footer__link-list">
+                    <li><a href="#">Link para o Projeto no GitHub</a></li>
+                    <li><a href="#">@autor Ruddá Beltrão - beltrao.rudah@gmail.com</a></li>
+                </ul>
+            </div>
+        </footer>
+    </main>
+</div>
+
+</body>
+</html>

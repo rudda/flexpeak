@@ -15,3 +15,13 @@
     background:
             url('../src/img/alunos.png') bottom right 15% no-repeat #46B6AC;
 }
+.link {
+    background-color: transparent;
+    border: 0;
+    color: #00f;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0;
+    position: relative;
+    text-decoration: underline;
+}

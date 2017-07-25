@@ -12,6 +12,8 @@
  * CURSO_ID
  * */
 
+use FlexPeak\App\PortalProfessor;
+use FlexPeak\Model\Aluno;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -30,18 +32,20 @@ $app->get('/aluno', function(Request $request, Response $response, $agrs){
 $app->post('/aluno', function(Request $request, Response $response, $agrs){
 
     
-    $aluno = new \FlexPeak\Model\Aluno();
+    $aluno = new Aluno();
     $aluno->setCursoIdCurso($request->getParam('curso_id'));
     $aluno->setNome($request->getParam('nome'));
     $aluno->setMae($request->getParam('mae'));
     $aluno->setCep($request->getParam('cep'));
-    $aluno->setLogradouro($request->getParam('logradrouro'));
+    $aluno->setLogradouro($request->getParam('logradouro'));
     $aluno->setBairro($request->getParam('bairro'));
-    $aluno->setNumero($request->getParam('numero'));
+    $aluno->setNumero("0000");
     $aluno->setCidade($request->getParam('cidade'));
-            
-    $api = new \FlexPeak\App\PortalProfessor();
+
+     
+    $api = new PortalProfessor();
     $response->write($api->addAluno($aluno));
+
 
 
 });

@@ -17,14 +17,14 @@ class Log
     public function sucess($message, $data){
 
         $response = array("code"=>200, "message"=>$message, "data"=> $data );
-        return json_encode($response);
+        return json_encode($response, JSON_UNESCAPED_UNICODE);
         
     }
 
     public function error($message){
 
         $response = array("code"=>400, "message"=>$message);
-        return json_encode($response);
+        return json_encode($response, JSON_UNESCAPED_UNICODE);
 
 
     }
@@ -32,7 +32,7 @@ class Log
     public function noDada(){
 
         $response = array("code"=>401, "message"=>"nenhum registro");
-        return json_encode($response);
+        return json_encode($response, JSON_UNESCAPED_UNICODE);
 
 
     }
@@ -40,7 +40,7 @@ class Log
     public function internalError($message){
 
         $response = array("code"=>407, "message"=>$message);
-        return json_encode($response);
+        return json_encode($response, JSON_UNESCAPED_UNICODE);
 
     }
 

@@ -1,5 +1,6 @@
 <?php
 namespace FlexPeak\App;
+
 use Exception;
 use FlexPeak\Model\Aluno;
 use FlexPeak\Model\Curso;
@@ -21,10 +22,10 @@ class PortalProfessor
     private $log;
     private $PDOExceptionMessage;
 
-    public $host='localhost';
-    public $pass= '';
-    public $user='root';
-    public $dbname= 'flexpeak-desafio';
+    public $host = 'localhost';
+    public $pass = '';
+    public $user = 'root';
+    public $dbname = 'flexpeak-desafio';
 
 
     function __construct()
@@ -32,34 +33,36 @@ class PortalProfessor
         $this->log = new Log();
     }
 
-    private function  connect(){
+    private function connect()
+    {
 
-           try{
-                //nao usar porta 80 em teste local
-                $this->pdo = new PDO('mysql:host=localhost;dbname=flexpeak-desafio', 'root', '', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''));
-                $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true); //habilitar par multiplas queries
+        try {
+            //nao usar porta 80 em teste local
+            $this->pdo = new PDO('mysql:host=localhost;dbname=flexpeak-desafio', 'root', '', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''));
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true); //habilitar par multiplas queries
 
 
-            }catch (\PDOException $err){
-               $this->PDOExceptionMessage = $err->getMessage();
-                $this->pdo = false;
+        } catch (\PDOException $err) {
+            $this->PDOExceptionMessage = $err->getMessage();
+            $this->pdo = false;
 
-            }
+        }
 
         return false;
     }
 
 
-    public function addCurso(Curso $curso){
+    public function addCurso(Curso $curso)
+    {
 
 
         $this->connect();
 
-        if($this->pdo != null && $this->pdo != false){
+        if ($this->pdo != null && $this->pdo != false) {
 
 
-            try{
+            try {
 
                 $query = 'INSERT INTO `curso` ( `nome`, `resumo`, `professor_id_professor`, `capa`) VALUES ( :nome, :resumo, :professor_id_professor, :capa) ';
 
@@ -71,18 +74,18 @@ class PortalProfessor
                 $stmt->bindValue(':capa', $curso->getCapa());
 
 
-                if($stmt->execute()){
+                if ($stmt->execute()) {
 
                     $curso->setIdCurso($this->pdo->lastInsertId());
                     return $this->log->sucess('sucesso ao cadastrar curso', $curso);
 
-                }else{
+                } else {
 
                     return $this->log->error('curso nao cadastrado');
 
                 }
 
-            }catch (\PDOException $erro){
+            } catch (\PDOException $erro) {
 
                 return $this->log->error($erro->getMessage());
 
@@ -90,26 +93,26 @@ class PortalProfessor
 
 
         }
-            return $this->log->error('conexao not  ok '.$this->PDOExceptionMessage);
+        return $this->log->error('conexao not  ok ' . $this->PDOExceptionMessage);
 
     }
 
-    public function getCursos($professor_id, $idcurso=""){
-
+    public function getCursos($professor_id, $idcurso = "")
+    {
 
 
         $this->connect();
-        if($this->pdo != null and $this->pdo != false){
+        if ($this->pdo != null and $this->pdo != false) {
 
             $query = 'select * from curso where professor_id_professor = :key';
 
-            if(strcmp($idcurso, '')!=0){
+            if (strcmp($idcurso, '') != 0) {
 
-                $query = $query.' and id_curso = :curso';
+                $query = $query . ' and id_curso = :curso';
                 $stmt = $this->pdo->prepare($query);
                 $stmt->bindValue(':key', $professor_id);
                 $stmt->bindValue(':curso', $idcurso);
-            }else{
+            } else {
 
                 $stmt = $this->pdo->prepare($query);
                 $stmt->bindValue(':key', $professor_id);
@@ -117,19 +120,18 @@ class PortalProfessor
             }
 
 
-
-            if($stmt->execute()){
+            if ($stmt->execute()) {
                 $data = array();
 
-                while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+                while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
                     $data[] = $result;
 
                 }
-                if(count($data)>0){
+                if (count($data) > 0) {
 
                     return $this->log->sucess('sucesso', $data);
-                }else{
+                } else {
 
 
                     return $this->log->noDada();
@@ -150,25 +152,37 @@ class PortalProfessor
     }
 
 
-    public function getnotas($aluno_id, $curso_id){
+    public function getnotas($aluno_id, $curso_id)
+    {
 
-        $query= 'select nota_1, nota_2, nota_3, nota_4 from notas where aluno_id_aluno = :aluno and curso_id_curso = :curso';
+        $query = 'select nota_1, nota_2, nota_3, nota_4, ( (nota_1 + nota_2 + nota_3 + nota_4)/4 ) as media from notas where aluno_id_aluno = :aluno and curso_id_curso = :curso';
         $this->connect();
+        // $this->pdo = new PDO();
 
-        if($this->pdo!= false && $this->pdo!= null){
 
-            try{
+        if ($this->pdo != false && $this->pdo != null) {
+
+            try {
 
                 $stmt = $this->pdo->prepare($query);
                 $stmt->bindValue(":aluno", $aluno_id);
                 $stmt->bindValue(":curso", $curso_id);
 
-                if($stmt->execute() ){
+                if ($stmt->execute()) {
 
-                    if( $stmt->rowCount()>0){
+                    if ($stmt->rowCount() > 0) {
 
                         $data = array();
-                        while ($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+                        while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                            if($result['media']>=6){
+
+                                $result['situacao'] = 'aprovado';
+
+                            }else{
+
+                                $result['situacao'] = 'reprovado';
+                            }
 
                             $data[] = $result;
 
@@ -176,104 +190,163 @@ class PortalProfessor
 
                         return $this->log->sucess('sucess', $data);
 
-                    }else{
+                    } else {
 
-                        return $this->log->noDada();
+                        return $this->log->error($stmt->queryString);
                     }
 
                 }
 
-            }catch(Exception $err){
+            } catch (Exception $err) {
 
 
                 $this->log->error($err->getMessage());
 
             }
 
-        }
-        else
-        return $this->log->error('Erro de conexao com o banco de dados');
+        } else
+            return $this->log->error('Erro de conexao com o banco de dados');
 
         return $this->log->error('Erro desconhecido');
-        
+
     }
-    
-    
-    public function addNota(Nota $notas){
 
-      $data = $this->getnotas($notas->aluno_id_aluno, $notas->curso_id_curso);
 
-        $queryUpdate = 'update nota set nota_1 = :n1, nota_2 = :n2, nota_3 = :n3, nota_4 = :n4 where curso_id_curso = :curso and aluno_id_aluno = :aluno';
-        $query = 'insert into nota(nota_1, nota_2, nota_3, nota_4, aluno_id_aluno, curso_id_curso) values(:n1, :n2, :n3, :n4, :aluno, :curso)';
+    public function updateNota(Nota $notas)
+    {
 
-        if($data['code']== 200){
+        $queryUpdate = 'update notas set nota_1 = :n1, nota_2 = :n2, nota_3 = :n3, nota_4 = :n4 where curso_id_curso = :curso and aluno_id_aluno = :aluno';
 
-           //existe notas entao atualiza
-            $query = $queryUpdate;
+        $this->connect();
 
-       }
+        if ($this->pdo != false && $this->pdo != null) {
 
-      $this->connect();
-        if($this->pdo != false && $this->pdo != null){
-
-            try{
+            try {
 
                 //tratar notas vazias --- o construct seria a melhor opcao
-                $notas->setNota1($notas->getNota1()!=  null && $notas->getNota1() != '' ? $notas->getNota1() : 0);
-                $notas->setNota2($notas->getNota2()!=  null && $notas->getNota2() != '' ? $notas->getNota2() : 0);
-                $notas->setNota3($notas->getNota3()!=  null && $notas->getNota3() != '' ? $notas->getNota3() : 0);
-                $notas->setNota4($notas->getNota4()!=  null && $notas->getNota4() != '' ? $notas->getNota4() : 0);
+                $notas->setNota1($notas->getNota1() != null && $notas->getNota1() != '' ? $notas->getNota1() : 0);
+                $notas->setNota2($notas->getNota2() != null && $notas->getNota2() != '' ? $notas->getNota2() : 0);
+                $notas->setNota3($notas->getNota3() != null && $notas->getNota3() != '' ? $notas->getNota3() : 0);
+                $notas->setNota4($notas->getNota4() != null && $notas->getNota4() != '' ? $notas->getNota4() : 0);
 
 
-                $this->pdo = new PDO('','','');
-
-                $stmt = $this->pdo->prepare($query);
+                $stmt = $this->pdo->prepare($queryUpdate);
                 $stmt->bindValue(':n1', $notas->getNota1());
                 $stmt->bindValue(':n2', $notas->getNota2());
                 $stmt->bindValue(':n3', $notas->getNota3());
                 $stmt->bindValue(':n4', $notas->getNota4());
                 $stmt->bindValue(':curso', $notas->getCursoIdCurso());
-                $stmt->bindValue(':aluno', $notas->aluno_id_aluno);
+                $stmt->bindValue(':aluno', $notas->getAlunoIdAluno());
 
-                if($stmt->execute()){
+                if ($stmt->execute()) {
                     //fazer uma notificao para o aluno tambem
                     return $this->log->sucess('sucess', null);
 
-                }else{
+                } else {
 
                     //falha sql
                     return $this->log->error('erro ao cadastrar');
                 }
 
 
-            }catch (Exception $err){
+            } catch (Exception $err) {
 
                 return $this->log->error($err->getMessage());
 
             }
 
-        }else{
 
-            //falha de conexao
-            return $this->log->error($this->PDOExceptionMessage);
+        } else {
 
+            return $this->log->error('erro de conexao');
+
+        }
+
+    }
+
+    public function addNota(Nota $notas)
+    {
+        error_reporting(0);
+        ini_set('display_errors', 0 );
+
+        $data = $this->getnotas($notas->aluno_id_aluno, $notas->curso_id_curso);
+
+
+        $query = 'insert into notas(nota_1, nota_2, nota_3, nota_4, aluno_id_aluno, curso_id_curso) values(:n1, :n2, :n3, :n4, :aluno, :curso)';
+
+
+        if ($data['code'] == 200) {
+
+            /*return $this->log->sucess('passou 200', null);
+            die;
+            */
+            return $this->updateNota($notas);
+
+
+        } else {
+
+
+            $this->connect();
+            if ($this->pdo != false && $this->pdo != null) {
+
+                try {
+
+                    //tratar notas vazias --- o construct seria a melhor opcao
+                    $notas->setNota1($notas->getNota1() != null && $notas->getNota1() != '' ? $notas->getNota1() : 0);
+                    $notas->setNota2($notas->getNota2() != null && $notas->getNota2() != '' ? $notas->getNota2() : 0);
+                    $notas->setNota3($notas->getNota3() != null && $notas->getNota3() != '' ? $notas->getNota3() : 0);
+                    $notas->setNota4($notas->getNota4() != null && $notas->getNota4() != '' ? $notas->getNota4() : 0);
+
+
+                    $stmt = $this->pdo->prepare($query);
+                    $stmt->bindValue(':n1', $notas->getNota1());
+                    $stmt->bindValue(':n2', $notas->getNota2());
+                    $stmt->bindValue(':n3', $notas->getNota3());
+                    $stmt->bindValue(':n4', $notas->getNota4());
+                    $stmt->bindValue(':curso', $notas->getCursoIdCurso());
+                    $stmt->bindValue(':aluno', $notas->getAlunoIdAluno());
+
+                    if ($stmt->execute()) {
+                        //fazer uma notificao para o aluno tambem
+                        return $this->log->sucess('sucess', null);
+
+                    } else {
+
+                        //falha sql
+                        return $this->log->error('erro ao cadastrar');
+                    }
+
+
+                } catch (Exception $err) {
+
+                    return $this->log->error($err->getMessage());
+
+                }
+
+            } else {
+
+                //falha de conexao
+                return $this->log->error($this->PDOExceptionMessage);
+
+            }
 
         }
 
 
-
     }
 
-    public function addAluno(Aluno $aluno){
+
+    public function addAluno(Aluno $aluno)
+    {
 
 
         $query = 'insert into aluno(nome, mae, cep, logradouro, bairro, cidade, numero, curso_id_curso) values( :nome, :mae, :cep, :logradouro, :bairro, :cidade, :numero, :curso)';
 
-        $this->pdo = new PDO('','','');
-        $this->connect();
-        if($this->pdo!= null && $this->pdo != false){
 
-            try{
+        $this->connect();
+        if ($this->pdo != null && $this->pdo != false) {
+
+            try {
 
                 $stmt = $this->pdo->prepare($query);
 
@@ -286,46 +359,48 @@ class PortalProfessor
                 $stmt->bindValue(':mae', $aluno->getMae());
                 $stmt->bindValue(':numero', $aluno->getNumero());
 
-                if($stmt->execute()){
-                
-                   return $this->log->sucess('sucess', null);
-                    
+                if ($stmt->execute()) {
+
+                    return $this->log->sucess('sucess', null);
+
                 }
 
-            }catch (Exception $erro){
-                
-              return $this->log->error($erro);       
-            
+            } catch (Exception $erro) {
+
+                return $this->log->error($erro);
+
             }
-                       
+
         }
-        
-        return  $this->log->error('erro na conexao com banco de dados');
+
+        return $this->log->error('erro na conexao com banco de dados');
 
     }
 
-    public function getAlunos($curso_id){
+    public
+    function getAlunos($curso_id)
+    {
 
         $query = 'select * from aluno where curso_id_curso = :curso';
 
         $this->connect();
 
 
-        if($this->pdo != false && $this->pdo != null){
+        if ($this->pdo != false && $this->pdo != null) {
 
 
-            try{
+            try {
 
                 $stmt = $this->pdo->prepare($query);
                 $stmt->bindValue(':curso', $curso_id);
 
-                if($stmt->execute()){
+                if ($stmt->execute()) {
 
-                    if($stmt->rowCount()>0){
+                    if ($stmt->rowCount() > 0) {
 
                         $data = array();
 
-                        while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+                        while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
                             $data[] = $result;
 
@@ -334,20 +409,18 @@ class PortalProfessor
                         return $this->log->sucess('sucess', $data);
 
 
-                    }else{
+                    } else {
 
                         return $this->log->noDada();
                     }
 
                 }
 
-            }catch (Exception $erro){
+            } catch (Exception $erro) {
 
                 return $this->log->error($erro->getMessage());
 
             }
-
-
 
 
         }
@@ -357,45 +430,44 @@ class PortalProfessor
     }
 
 
-    public function professorLogin($email, $pass){
+    public
+    function professorLogin($email, $pass)
+    {
 
         $query = 'select id_professor, nome from professor where email =:email and senha = :pass';
-        
-        $this->connect();
-        
-        if($this->pdo != false and $this->pdo != null){
 
-            
+        $this->connect();
+
+        if ($this->pdo != false and $this->pdo != null) {
+
+
             $stmt = $this->pdo->prepare($query);
             $stmt->bindValue(':email', $email);
             $stmt->bindValue(':pass', $pass);
-            
-            if($stmt->execute()){
-                
-                if($stmt->rowCount()===1){
-                    
+
+            if ($stmt->execute()) {
+
+                if ($stmt->rowCount() === 1) {
+
                     $response = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                 return   $this->log->sucess('sucess', $response);
-                }else{
-                    
-                  return   $this->log->error('erro ao efetuar login');
+                    return $this->log->sucess('sucess', $response);
+                } else {
+
+                    return $this->log->error('erro ao efetuar login');
                 }
-                
-            }else{
-                
+
+            } else {
+
                 return $this->log->error("erro ao executar sql");
             }
-                       
-            
+
+
         }
 
         return $this->log->error("erro ao conectar ao banco de dados");
-        
+
     }
-
-
-    
 
 
 }

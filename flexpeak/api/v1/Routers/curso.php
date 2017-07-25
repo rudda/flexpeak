@@ -112,7 +112,7 @@ $app->get('/curso/notas/{id}', function(Request $request, Response $response, $a
 
     $id = $request->getParam('curso_id');
     $aluno = $args['id'];
-    
+    $log = new Log();
     $api = new PortalProfessor();
     $response->write($api->getnotas($aluno, $id));
     
@@ -137,10 +137,10 @@ $app->post('/curso/notas/{aluno}', function(Request $request, Response $response
     $notas->setCursoIdCurso($request->getParam('curso_id'));
     $notas->setAlunoIdAluno($args['aluno']);
     
-    $notas->setNota1($request->getParam(':nota_1'));
-    $notas->setNota2($request->getParam(':nota_2'));
-    $notas->setNota3($request->getParam(':nota_3'));
-    $notas->setNota4($request->getParam(':nota_4'));
+    $notas->setNota1($request->getParam('nota_1'));
+    $notas->setNota2($request->getParam('nota_2'));
+    $notas->setNota3($request->getParam('nota_3'));
+    $notas->setNota4($request->getParam('nota_4'));
 
     $api = new PortalProfessor();
     $response->write($api->addNota($notas) );

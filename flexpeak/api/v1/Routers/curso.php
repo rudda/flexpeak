@@ -34,7 +34,7 @@ $app->post('/curso', function (Request $request, Response $response, $args){
 
             $nameProfile = 'getProfile'.time().'.'.(explode('/',$_FILES['foto']['type'])[1]);
 
-            $path= 'http://localhost/flexpeak/flexpeak/api/v1/src/img/';
+            $path= 'http://www.lab312-icetufam.com.br/rudda/flexpeak/flexpeak/api/v1/src/img/';
 
             $workspace =__DIR__.'/../src/img/';
 

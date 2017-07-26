@@ -22,7 +22,7 @@ $app->get('/reports', function(Request $request, Response $response, $agrs){
 
     $mpdf = new \mPDF();
     $mpdf->WriteHTML($html->data);
-    $mpdf->Output();
+    $mpdf->Output('flexpeak-report-notas-'.time().'.pdf','D');
 
 
 

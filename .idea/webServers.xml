@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="cd5f9e49-a380-4791-bc23-aa2c88ea6206" name="lab-flex" url="http://www.lab312-icetufam.com.br">
+        <fileTransfer host="www.lab312-icetufam.com.br" port="21" rootFolder="/public_html/rudda/flexpeak" username="lab31487">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

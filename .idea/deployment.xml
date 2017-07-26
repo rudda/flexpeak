@@ -2,7 +2,14 @@
 <project version="4">
   <component name="PublishConfigData">
     <serverData>
-      <paths name="lab">
+      <paths name="lab-flex">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/rudda/flexpeak" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="lab312">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />

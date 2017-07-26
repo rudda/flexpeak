@@ -19,21 +19,27 @@ $(function () {
         $.ajax({
 
             type:"get",
-            url:"../../../flexpeak/flexpeak/api/v1/professor?email="+email+"&senha="+senha,
-
+            url:"../flexpeak/api/v1/professor?email="+email+"&senha="+senha,
+            headers: {
+                "Access-Control-Allow-Origin":"*"
+            },
+            dataType: 'json',
+            crossDomain: true,
             processData: false,
             contentType: false
 
         }).done(function (data) {
 
-            var json = JSON.parse(data);
+
+            
+            
 
 
-            if(json['code']==200){
+            if(data['code']==200){
 
-
-                sessionStorage.setItem('professor_id', json['data']['id_professor']);
-                sessionStorage.setItem('professor_nome', json['data']['nome']);
+                //var json = JSON.parse(data['data']);
+                sessionStorage.setItem('professor_id', data['data']['id_professor']);
+                sessionStorage.setItem('professor_nome', data['data']['nome']);
                 window.location.href= 'html/professor.html'
             }else{
 

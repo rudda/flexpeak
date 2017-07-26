@@ -7,6 +7,23 @@ $(document).ready(
 
     $(function () {
 
+        
+        var professor_id;
+        var professor_nome;
+
+        if(sessionStorage.getItem('professor_id')!= undefined){
+
+            professor_id = sessionStorage.getItem('professor_id');
+            professor_nome = sessionStorage.getItem('professor_nome');
+
+
+        }else{
+
+            window.location.href='../index.html';
+
+        }
+
+
 
 
         var query = location.search.slice(1);
@@ -25,6 +42,8 @@ $(document).ready(
         if(curso != undefined)
             sessionStorage.setItem('current_curso', curso);
 
+
+
         /*dialog notas*/
 
         getAlunosCurso(sessionStorage.getItem('current_curso'));
@@ -34,7 +53,7 @@ $(document).ready(
 
             $.ajax({
                 type: "GET",
-                url: "../../../flexpeak/flexpeak/api/v1/aluno?curso_id="+id,
+                url: "../../flexpeak/api/v1/aluno?curso_id="+id,
                 data:{
 
                 },
@@ -43,7 +62,7 @@ $(document).ready(
 
             }).done(function (data) {
 
-
+                console.log(data);
                 var listaAlunos = JSON.parse(data);
 
                 try{
@@ -148,7 +167,7 @@ $(document).ready(
             form.append('curso_id', id_curso);
 
 
-            console.log(form);
+            
 
             $.ajax(
                 {
@@ -160,7 +179,11 @@ $(document).ready(
 
                 }).done(function(dados){
 
+
                 var json = JSON.parse(dados);
+                
+                
+                
                 if(json['code']==200){
 
                     alert('aluno cadastrado com sucesso');
@@ -180,15 +203,15 @@ $(document).ready(
 
         $('#report').click(function () {
 
-            
+
             report();
-            
+
         });
-        
+
     })
 
 
-    
+
     
 );
 
@@ -199,7 +222,7 @@ $(document).ready(
     console.log('show '+id);
      var dialog = document.getElementById('#nota');
      var code;
-    var url = 'http://localhost/flexpeak/flexpeak/api/v1/curso/notas/'+id+'?curso_id='+curso;
+    var url = '../../flexpeak/api/v1/curso/notas/'+id+'?curso_id='+curso;
 
      $.ajax({
 
@@ -265,7 +288,7 @@ $(document).ready(
 
         $.ajax({
 
-            url: "../../../flexpeak/flexpeak/api/v1/curso/notas/"+id,
+            url: "../../flexpeak/api/v1/curso/notas/"+id,
             type: "post",
             data:form,
 
@@ -297,12 +320,14 @@ function report() {
 
     $.get(
         {
-            url:'http://localhost/flexpeak/flexpeak/api/v1/reports?curso_id='+id
+            url:'../../flexpeak/api/v1/reports?curso_id='+id
 
         }
 
     ).done(function (data) {
 
+
+        alert(data);
 
 
 

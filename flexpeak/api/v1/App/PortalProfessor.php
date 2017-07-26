@@ -6,6 +6,7 @@ use FlexPeak\Model\Aluno;
 use FlexPeak\Model\Curso;
 use FlexPeak\Model\Nota;
 use FlexPeak\Utils\Log;
+use mPDF;
 use PDO;
 
 /**
@@ -38,7 +39,7 @@ class PortalProfessor
 
         try {
             //nao usar porta 80 em teste local
-            $this->pdo = new PDO('mysql:host=localhost;dbname=flexpeak-desafio', 'root', '', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''));
+            $this->pdo = new PDO('mysql:host=localhost;dbname=lab31487_flexpeak-desafio', 'lab31487_rudda_b', 'meganfox123', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''));
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true); //habilitar par multiplas queries
 
@@ -377,8 +378,7 @@ class PortalProfessor
 
     }
 
-    public
-    function getAlunos($curso_id)
+    public function getAlunos($curso_id)
     {
 
         $query = 'select * from aluno where curso_id_curso = :curso';
@@ -430,8 +430,7 @@ class PortalProfessor
     }
 
 
-    public
-    function professorLogin($email, $pass)
+    public function professorLogin($email, $pass)
     {
 
         $query = 'select id_professor, nome from professor where email =:email and senha = :pass';
@@ -468,6 +467,91 @@ class PortalProfessor
         return $this->log->error("erro ao conectar ao banco de dados");
 
     }
+
+    
+    
+    public function getReport($curso){
+
+        $query = 'select a.nome as nome , n.nota_1, n.nota_2, n.nota_3, n.nota_4, ( (n.nota_1 + n.nota_2 + n.nota_3 + n.nota_4)/4 ) as media from notas as n  inner join aluno as a on a.curso_id_curso = n.curso_id_curso where  n.curso_id_curso = :curso and a.curso_id_curso = n.curso_id_curso ';
+
+        
+        $this->connect();
+        // $this->pdo = new PDO();
+
+
+        if ($this->pdo != false && $this->pdo != null) {
+
+            try {
+
+                $stmt = $this->pdo->prepare($query);
+                
+                $stmt->bindValue(":curso", $curso);
+
+                if ($stmt->execute()) {
+
+                    if ($stmt->rowCount() > 0) {
+
+                        $data = '';
+                        while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                            if($result['media']>=6){
+
+                                $result['situacao'] = 'aprovado';
+
+                            }else{
+
+                                $result['situacao'] = 'reprovado';
+                            }
+
+
+                            $data.='<h5>nome:'.$result['nome'].'</h5>'.
+                                    '<h5>nota 1:'.$result['nota_1'].'</h5>'.
+                                    '<h5>nota 1:'.$result['nota_2'].'</h5>'.
+                                    '<h5>nota 1:'.$result['nota_3'].'</h5>'.
+                                    '<h5>nota 1:'.$result['nota_4'].'</h5>'.
+                                    '<h5>media:'.$result['media'].'</h5>'.
+                                    '<h5>situacao:'.$result['situacao'].'</h5>'.
+                                    '<br><br>';
+                           
+                            
+                        }
+                        
+                        
+                        $body = '<html lang="en">'.
+                                '   <head>'.
+                                '      <meta charset="UTF-8">'.
+                                '        <title>Notas</title>'.
+                                '    </head>'.
+                                '    <body>';
+
+                        $body.= $data;
+                        $body.= '<'.'/body> </html>';
+
+
+
+                        return $this->log->sucess('sucess', $body);
+
+                    } else {
+
+                        return $this->log->error($stmt->queryString);
+                    }
+
+                }
+
+            } catch (Exception $err) {
+
+
+                $this->log->error($err->getMessage());
+
+            }
+
+        } else
+            return $this->log->error('Erro de conexao com o banco de dados');
+
+        return $this->log->error('Erro desconhecido');
+
+    }
+
 
 
 }

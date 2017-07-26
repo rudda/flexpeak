@@ -177,9 +177,19 @@ $(document).ready(
         });
 
 
+
+        $('#report').click(function () {
+
+            
+            report();
+            
+        });
+        
     })
 
 
+    
+    
 );
 
 
@@ -273,5 +283,30 @@ $(document).ready(
         
 
     })
+
+
+    
+
+}
+
+
+function report() {
+
+    var id = sessionStorage.getItem('current_curso');
+    
+
+    $.get(
+        {
+            url:'http://localhost/flexpeak/flexpeak/api/v1/reports?curso_id='+id
+
+        }
+
+    ).done(function (data) {
+
+
+
+
+    });
+
 
 }

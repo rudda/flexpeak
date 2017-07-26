@@ -22,6 +22,7 @@ include (__DIR__.'/Routers/curso.php');
 include (__DIR__.'/Routers/professor.php');
 include (__DIR__.'/Routers/aluno.php');
 include (__DIR__.'/Routers/notas.php');
+include (__DIR__.'/Routers/report.php');
 
 
 $app->run();

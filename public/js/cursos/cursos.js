@@ -326,9 +326,9 @@ function report() {
 
     ).done(function (data) {
 
-
-        alert(data);
-
+        var json = JSON.parse((data));
+        alert(json.message);
+        console.log(data);
 
 
     });

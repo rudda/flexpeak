@@ -222,8 +222,8 @@ $(document).ready(
 
     function goToCurso(id){
 
-
-        window.location.href = '/flexpeak/public/html/cursos.html?curso_id='+id;
+       
+        window.location.href = 'cursos.html?curso_id='+id;
 
 
     }

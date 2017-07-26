@@ -17,12 +17,36 @@ $app->get('/reports', function(Request $request, Response $response, $agrs){
     $curso = $request->getParam('curso_id');
     $api = new \FlexPeak\App\PortalProfessor();
     
-    
-    $html = json_decode( $api->getReport($curso) );
+    try{
 
-    $mpdf = new \mPDF();
-    $mpdf->WriteHTML($html->data);
-    $mpdf->Output('flexpeak-report-notas-'.time().'.pdf','D');
+        $html = json_decode( $api->getReport($curso) );
+
+        if($html->code == 200){
+
+            $mpdf = new \mPDF();
+            $mpdf->WriteHTML($html->data);
+            $mpdf->Output('flexpeak-report-notas-'.time().'.pdf','D');
+
+
+        }else{
+
+            $log = new \FlexPeak\Utils\Log();
+            $response->write($log->error("Sem dados para reportar"));
+
+        }
+
+
+
+    }catch (Exception $err){
+
+
+        $log = new \FlexPeak\Utils\Log();
+        $response->write($log->error($err->getMessage()));
+
+
+    }
+
+
 
 
 
